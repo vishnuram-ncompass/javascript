@@ -61,35 +61,41 @@ const getAllOrderCustomers = async ( req , res , next ) => {
             ON u.customer_id = o.customer_id
         WHERE o.order_id = ?;`;
 
-    const oid = 
-        Number(req.params.oid);
+    try{
 
-    if( isNaN(oid) )
-        return next( 
-            new appError( 
-                "Invalid order ID" , 
-                404
-            )
+        const oid = 
+            Number(req.params.oid);
+
+        if( isNaN(oid) )
+            return next( 
+                new appError( 
+                    "Invalid order ID" , 
+                    404
+                )
+            );
+
+
+        let [result] = 
+            await pool.query( query , [oid] );
+
+        if( result.length === 0 )
+            return next( 
+                new appError( 
+                    "No order found with that ID" , 
+                    404
+                )
+            );
+
+        return responseHandler( 
+            res , 
+            "Customers of particular order..." , 
+            result , 
+            200
         );
-
-
-    let [result] = 
-        await pool.query( query , [oid] );
-
-    if( result.length === 0 )
-        return next( 
-            new appError( 
-                "No order found with that ID" , 
-                404
-            )
-        );
-
-    return responseHandler( 
-        res , 
-        "Customers of particular order..." , 
-        result , 
-        200
-    );
+    }
+    catch( error ){
+        next( error );
+    }
 }
         
 const getOrderCustomer =  async ( req , res , next ) => {
@@ -107,41 +113,46 @@ const getOrderCustomer =  async ( req , res , next ) => {
             ON u.customer_id = o.customer_id
         WHERE o.order_id = ? AND u.customer_id = ?`;
         
-    const oid = 
-        Number(req.params.oid);
+    try{
+        const oid = 
+            Number(req.params.oid);
     
-    const uid = 
-        Number(req.params.uid);
-    
-    if( isNaN(uid) ){
-        return next( 
-            new appError( 
-                "Invalid customer ID" , 
-                404 
-            )
+        const uid = 
+            Number(req.params.uid);
+        
+        if( isNaN(uid) ){
+            return next( 
+                new appError( 
+                    "Invalid customer ID" , 
+                    404 
+                )
+            );
+        }
+
+        let [result] = 
+            await pool.query( 
+                query , 
+                [oid , uid] 
+            );
+
+        if( result.length === 0 )
+            return next( 
+                new appError( 
+                    "No order found with that ID" , 
+                    404 
+                )
+            );
+        
+        return responseHandler( 
+            res , 
+            "Particular customer of particular order..." , 
+            result , 
+            200 
         );
     }
-        
-    let [result] = 
-        await pool.query( 
-            query , 
-            [oid , uid] 
-        );
-
-    if( result.length === 0 )
-        return next( 
-            new appError( 
-                "No order found with that ID" , 
-                404 
-            )
-        );
-    
-    return responseHandler( 
-        res , 
-        "Particular customer of particular order..." , 
-        result , 
-        200 
-    );
+    catch( error ){
+        next( error );
+    }
 }
 
 module.exports = { 
