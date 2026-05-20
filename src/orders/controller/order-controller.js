@@ -1,14 +1,10 @@
-const express = 
-    require( 'express' );
+const express = require( 'express' );
 
-const { responseHandler } = 
-    require('../../middleware/auth' );
+const { responseHandler } = require('../../middleware/auth' );
 
-let pool = 
-    require( '../../utils/db' );
+let pool = require( '../../utils/db' );
 
-const appError = 
-    require( '../../middleware/app-error' );
+const appError = require( '../../middleware/app-error' );
 
 const getAllOrders = async ( req , res , next ) => {
     
@@ -17,7 +13,7 @@ const getAllOrders = async ( req , res , next ) => {
                 o.order_id AS orderId,
                 o.customer_id AS customerId,
                 o.item_name AS itemName,
-                o.amount AS orderAmount,
+                o.order_amount AS orderAmount,
                 o.order_date AS orderDate
             FROM orders o;`;
 
@@ -32,6 +28,8 @@ const getAllOrders = async ( req , res , next ) => {
                     404
                 )
             );
+
+
 
         return responseHandler( 
             res , 
@@ -54,12 +52,12 @@ const getAllOrderCustomers = async ( req , res , next ) => {
                 u.customer_name AS customerName,
                 u.customer_email AS customerEmail,
                 o.item_name AS itemName,
-                o.amount AS orderAmount,
+                o.order_amount AS orderAmount,
                 o.order_date AS orderDate
             FROM orders o
         JOIN customers u
             ON u.customer_id = o.customer_id
-        WHERE o.order_id = ?;`;
+        WHERE o.order_id = ?;`
 
     try{
 
@@ -106,7 +104,7 @@ const getOrderCustomer =  async ( req , res , next ) => {
                 u.customer_name,
                 u.customer_email,
                 o.item_name,
-                o.amount,
+                o.order_amount AS orderAmount,
                 o.order_date
             FROM orders o
         JOIN customers u

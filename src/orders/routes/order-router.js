@@ -1,11 +1,8 @@
-const express = 
-    require( 'express' );
+const express = require( 'express' );
 
-const router = 
-    express.Router();
+const router = express.Router();
 
-let pool = 
-    require( '../../utils/db' );
+let pool = require( '../../utils/db' );
 
 const {authenticate} = 
     require( '../../middleware/auth');

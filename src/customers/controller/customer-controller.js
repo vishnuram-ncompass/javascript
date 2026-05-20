@@ -1,14 +1,10 @@
-const express = 
-    require( 'express' );
+const express = require( 'express' );
 
-let pool = 
-    require( '../../utils/db' );
+let pool = require( '../../utils/db' );
 
-const appError = 
-    require('../../middleware/app-error');
+const appError = require('../../middleware/app-error');
 
-const { responseHandler } = 
-    require('../../middleware/auth');
+const { responseHandler } = require('../../middleware/auth');
 
 const getAllCustomers = async (req , res , next) => {
     const query = 
@@ -52,7 +48,7 @@ const getAllCustomerOrders = async (req , res , next) => {
                     c.customer_email AS customerEmail,
                     o.order_id AS orderId,
                     o.item_name AS itemName,
-                    o.amount AS orderAmount,
+                    o.order_amount AS orderAmount,
                     o.order_date AS orderDate
                 FROM customers c
             JOIN orders o
@@ -107,7 +103,7 @@ const getCustomerOrder =  async (req , res , next) => {
             c.customer_name AS customerName,
             c.customer_email AS customerEmail,
             o.item_name AS itemName,
-            o.amount AS orderAmount,
+            o.order_amount AS orderAmount,
             o.order_date AS orderDate
         FROM customers c
     JOIN orders o

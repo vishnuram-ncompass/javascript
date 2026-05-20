@@ -6,3 +6,5 @@ class AppError extends Error {
 }
 
 module.exports = AppError;
+
+// custom class errors with appError as parent class...
