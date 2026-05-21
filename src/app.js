@@ -1,6 +1,6 @@
 const express = require( 'express' );
 require( 'dotenv' ).config();
-const {responseHandler } = require( './middleware/auth');
+const { responseHandler } = require( './middleware/auth');
 const logger = require( './middleware/logger'); 
 const globalErrorHandler = 
     require( './middleware/global-error-handler');
@@ -39,9 +39,8 @@ app.use( '/orders' , orderRouter );
 
 app.use((req, res, next) => {
     next(
-        new appError( 
-            "Can't find the path...", 
-            404
+        new appError.NotFoundError( 
+            "Can't find the path..."
         )
     );
 });

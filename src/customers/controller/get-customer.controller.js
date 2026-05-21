@@ -62,9 +62,9 @@ const getAllCustomers = async (req , res , next) => {
     }
     return responseHandler( 
         res , 
+        200,
         "Get all customers..." , 
-        result,
-        200
+        result
     );
 }
 
@@ -86,9 +86,9 @@ const getAllCustomerOrders = async (req , res , next) => {
     }    
     return responseHandler( 
         res , 
-        "Get all customer orders..." , 
-        result,
-        200
+        200,
+        "Get all customer orders...", 
+        result
     );
 }
 
@@ -131,9 +131,9 @@ const getCustomerOrder =  async (req , res , next) => {
 
     return responseHandler( 
         res , 
+        200,
         "Get customer order..." , 
-        result,
-        200
+        result
     );
 }
 

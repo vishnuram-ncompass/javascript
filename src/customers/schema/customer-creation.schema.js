@@ -6,13 +6,23 @@ exports.addNewCustomerSchema = joi.object({
                     .required(),
     
     customerEmail : joi.string()
-                        .email(),
+                        .email()
+                        .lowercase()
+                        .required(),
 
     customerPassword : joi.string()
+                        .min( 8 )
+                        .max( 20 )
                         .required()
 })
 
 exports.customerEmailSchema = joi.object({
     customerEmail : joi.string()
                         .email()
+                        .lowercase()
+                        .required(),
+    customerPassword : joi.string()
+                        .min( 8 )
+                        .max( 20 )
+                        .required()
 })

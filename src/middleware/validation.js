@@ -1,11 +1,11 @@
 const appError = require('./app-error');
 
-const validate = (schema, property) => {
+const validate = ( schema , prop ) => {
 
-    return (req, res, next) => {
-        const { error } = schema.validate( req[property] );
+    return ( req , res , next ) => {
+        const { error } = schema.validate( req[ prop ] );
         
-        if (error) {
+        if ( error ) {
             throw new appError(
                 error.details[0].message,
                 400

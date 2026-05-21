@@ -1,3 +1,6 @@
+const jwt = require( 'jsonwebtoken' );
+const { AppError, UnauthorizedError } = require('./app-error');
+
 function authenticate( roleToken ){
     return function( req , res , next ){    
         if( 
@@ -7,24 +10,33 @@ function authenticate( roleToken ){
         )
             next();
 
-        else{
-            return res.status( 401 ).json({ 
-                message : "Not Authorized... "
-            })
-        }
+        else
+            throw new UnauthorizedError( " Not Authorized... ");
     }
 }
-//for sql queries too..
+//for sql queries too...
 
-function responseHandler(  res , message , data , statusCode ) {
-    
-    return res.status( statusCode ).json({
-        data,
+function responseHandler(res, statusCode, message, data = null) {
+
+    return res.status(statusCode).json({
         success: true,
-        message
+        message,
+        data
     });
 }
 //response handler before the globalerrorhandler in app.js...
+
+function verifyToken( req , res , next ){
+    const token = req.headers['auth'];
+    if( !token ){
+        throw new UnauthorizedError(
+            "Token not found, Please login again"
+        );
+    }
+    const decoded = jwt.verify( token , process.env.JWT_SECRET_KEY );
+    req.user = decoded;
+    next();
+}
 
 module.exports = {       
     authenticate,

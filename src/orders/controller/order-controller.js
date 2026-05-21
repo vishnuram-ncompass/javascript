@@ -55,9 +55,9 @@ const getAllOrders = async ( req , res , next ) => {
 
     return responseHandler( 
         res , 
+        200,
         "Get all orders..." , 
-        result , 
-        200 
+        result 
     );        
 }
 
@@ -86,9 +86,9 @@ const getAllOrderCustomers = async ( req , res , next ) => {
 
     return responseHandler( 
         res , 
+        200,
         "Customers of particular order..." , 
-        result , 
-        200
+        result 
     );
 }
         
@@ -124,10 +124,10 @@ const getOrderCustomer =  async ( req , res , next ) => {
         );
     
     return responseHandler( 
-        res , 
+        res ,
+        200,
         "Particular customer of particular order..." , 
-        result , 
-        200 
+        result 
     );
 }
 

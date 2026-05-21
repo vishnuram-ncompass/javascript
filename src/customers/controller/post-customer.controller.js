@@ -1,4 +1,3 @@
-const express = require( 'express' );
 const appError = require( '../../middleware/app-error' );
 const { responseHandler } = require( '../../middleware/auth' );
 const idSchema = require( '../schema/customer-id.schema' )
@@ -7,9 +6,9 @@ const bcrypt = require( 'bcrypt' );
 
 const loginCustomerQuery = `
     SELECT 
-        customer_id AS customerId,
+            customer_id AS customerId
         FROM customers c
-    WHERE customer_name = ? ;`;
+    WHERE c.customer_email = ? ;`;
     
 const passwordLoginCheckQuery=`
     SELECT 
@@ -19,8 +18,8 @@ const passwordLoginCheckQuery=`
 
 const checkCustomerSql = `
     SELECT
-        c.customer_id AS customerId
-    FROM customers c
+            c.customer_id AS customerId
+        FROM customers c
     WHERE c.customer_email = ? ;`;
     
 const insertCustomerSql = `
@@ -44,16 +43,18 @@ exports.loginCustomer = async (req, res) => {
             401
         );
     }
-    const customerId = result[0];
+    const customerId = result[0].customerId;
 
-    const [ password ] = await pool.query( 
+    const [ passwordResult ] = await pool.query( 
         passwordLoginCheckQuery , 
         [ customerId ] 
     );
 
+    const hashedPassword = passwordResult[0].customerPassword;
+
     const isValidPassword = await bcrypt.compare(
         customerPassword,
-        password[0]
+        hashedPassword
     );
 
     if (!isValidPassword) {
@@ -63,9 +64,11 @@ exports.loginCustomer = async (req, res) => {
         );
     }
 
-    responseHandler(res, 200, {
-        message: "Login Successful",
-    });
+    responseHandler(
+        res, 
+        200,
+        "Login Successful"
+    );
 };
 
 // Adding customer section...
@@ -113,10 +116,10 @@ exports.addCustomer = async (req, res) => {
 
     responseHandler(
         res,
+        201,
         "Customer Added Successfully",
         {
             customerId
-        },
-        201
+        }
     );
 };
